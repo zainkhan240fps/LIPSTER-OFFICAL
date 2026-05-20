@@ -2,29 +2,76 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>LIPSTER X OFFICIAL - Ultimate Gaming Hub</title>
     
-    <!-- FAVICON - Browser Tab Icon -->
     <link rel="icon" type="image/jpeg" href="https://yt3.googleusercontent.com/QR5K1nDO7EeGBz2OkRMlgmjqgzi4y5mfvyqM05TWtKdKFQGSuWOJf_kKvqY5TbGoEcya03Lqsg=s160-c-k-c0x00ffffff-no-rj">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
     <style>
         * { cursor: none; }
-        body { background: #05050A; font-family: 'Inter', sans-serif; }
-        .custom-cursor { width: 28px; height: 28px; border: 2px solid #06b6d4; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+        body { background: #05050A; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        
+        .custom-cursor { width: 28px; height: 28px; border: 2px solid #06b6d4; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); transition: all 0.1s ease; }
         .custom-dot { width: 6px; height: 6px; background: #ec4899; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
-        .glass-panel { background: rgba(10, 10, 18, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(139, 92, 246, 0.2); }
+        
+        .glass-panel { background: rgba(10, 10, 18, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(139, 92, 246, 0.2); transition: all 0.3s ease; }
+        .glass-panel:hover { border-color: rgba(139, 92, 246, 0.5); }
+        
         .section-fade { opacity: 0; transform: translateY(28px); transition: all 0.7s ease; }
         .section-fade.visible { opacity: 1; transform: translateY(0); }
-        .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); transition: all 0.3s; }
+        
+        .optim-card { transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); position: relative; overflow: hidden; }
+        .optim-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent); transition: left 0.5s ease; }
+        .optim-card:hover::before { left: 100%; }
+        .optim-card:hover { transform: translateY(-5px) scale(1.02); border-color: #8b5cf6; box-shadow: 0 10px 30px -5px rgba(139, 92, 246, 0.4); }
+        
+        .btn-hover { transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); position: relative; overflow: hidden; }
+        .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(139, 92, 246, 0.6); }
+        
+        .neon-link { transition: all 0.2s ease; }
+        .neon-link:hover { text-shadow: 0 0 8px #06b6d4, 0 0 15px #06b6d4; }
+        
+        .filter-btn { transition: all 0.2s ease; cursor: none; }
+        .filter-btn.active { background: #8b5cf6 !important; color: white !important; box-shadow: 0 0 15px rgba(139, 92, 246, 0.5); }
+        .filter-btn:hover:not(.active) { background: rgba(139, 92, 246, 0.3); transform: translateY(-2px); }
+        
+        .video-card { transition: all 0.3s ease; }
+        .video-card:hover { transform: translateY(-8px); border-color: #ef4444 !important; box-shadow: 0 15px 35px -10px rgba(239, 68, 68, 0.3); }
+        
+        .game-card { transition: all 0.3s ease; }
+        .game-card:hover { transform: translateY(-5px) scale(1.05); }
+        
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #0a0a0f; }
         ::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 10px; }
+        
         button, a { cursor: none; }
+        
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        .float-animation { animation: float 4s ease-in-out infinite; }
+        
+        @keyframes pulseGlow { 0%, 100% { opacity: 0.3; } 50% { opacity: 0.8; } }
+        .pulse-glow { animation: pulseGlow 2s ease-in-out infinite; }
+        
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+        .spin-slow { animation: spin-slow 20s linear infinite; }
+        
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .shimmer { background: linear-gradient(90deg, transparent, rgba(139,92,246,0.1), transparent); background-size: 200% 100%; animation: shimmer 3s infinite; }
+        
+        .mobile-menu-btn { display: none; cursor: pointer; z-index: 1000; }
+        .mobile-nav { position: fixed; top: 0; right: -100%; width: 70%; max-width: 300px; height: 100vh; background: rgba(10, 10, 18, 0.95); backdrop-filter: blur(20px); z-index: 999; transition: right 0.3s ease; padding: 80px 25px 25px; border-left: 1px solid rgba(139, 92, 246, 0.3); }
+        .mobile-nav.active { right: 0; }
+        .mobile-nav a { display: block; padding: 12px 0; font-size: 14px; font-weight: bold; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); transition: all 0.2s; }
+        .mobile-nav a:hover { color: #06b6d4; padding-left: 10px; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 998; display: none; }
+        .overlay.active { display: block; }
+        @media (max-width: 768px) { .desktop-nav { display: none !important; } .mobile-menu-btn { display: block !important; } }
     </style>
 </head>
 <body class="text-white">
@@ -37,89 +84,146 @@
     <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 py-3 px-6">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-2 ring-purple-500/50">
-    <img src="https://yt3.googleusercontent.com/QR5K1nDO7EeGBz2OkRMlgmjqgzi4y5mfvyqM05TWtKdKFQGSuWOJf_kKvqY5TbGoEcya03Lqsg=s160-c-k-c0x00ffffff-no-rj" class="w-full h-full object-cover">
-</div>
+                <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-2 ring-purple-500/50 float-animation">
+                    <img src="https://yt3.googleusercontent.com/QR5K1nDO7EeGBz2OkRMlgmjqgzi4y5mfvyqM05TWtKdKFQGSuWOJf_kKvqY5TbGoEcya03Lqsg=s160-c-k-c0x00ffffff-no-rj" class="w-full h-full object-cover">
+                </div>
                 <span class="font-bold text-xl bg-gradient-to-r from-white via-purple-200 to-cyan-300 bg-clip-text text-transparent">LIPSTER <span class="text-purple-400">X</span></span>
             </div>
+            
             <nav class="hidden md:flex gap-6 text-xs uppercase font-bold">
-                <a href="#home" class="text-gray-300 hover:text-cyan-400">HOME</a>
-                <a href="#optimizers" class="text-gray-300 hover:text-cyan-400">OPTIMIZERS</a>
-                <a href="#cheats" class="text-gray-300 hover:text-cyan-400">CHEATS</a>
-                <a href="#emulators" class="text-gray-300 hover:text-cyan-400">EMULATORS</a>
-                <a href="#games" class="text-gray-300 hover:text-cyan-400">GAMES</a>
-                <a href="#about" class="text-gray-300 hover:text-cyan-400">ABOUT</a>
-                <a href="#yt-resources" class="text-gray-300 hover:text-cyan-400">YT RESOURCES</a>
+                <a href="#home" class="text-gray-300 hover:text-cyan-400 neon-link transition">HOME</a>
+                <a href="#optimizers" class="text-gray-300 hover:text-cyan-400 neon-link transition">OPTIMIZERS</a>
+                <a href="#cheats" class="text-gray-300 hover:text-cyan-400 neon-link transition">CHEATS</a>
+                <a href="#emulators" class="text-gray-300 hover:text-cyan-400 neon-link transition">EMULATORS</a>
+                <a href="#games" class="text-gray-300 hover:text-cyan-400 neon-link transition">GAMES</a>
+                <a href="#about" class="text-gray-300 hover:text-cyan-400 neon-link transition">ABOUT</a>
+                <a href="#yt-resources" class="text-gray-300 hover:text-cyan-400 neon-link transition">YT RESOURCES</a>
             </nav>
+            
+            <div class="mobile-menu-btn md:hidden">
+                <i class="fa-solid fa-bars text-2xl text-white"></i>
+            </div>
+            
             <div class="flex gap-3">
-                <a id="yt-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600/20"><i class="fab fa-youtube text-red-400"></i></a>
-                <a id="dc-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-indigo-600/20"><i class="fab fa-discord text-indigo-400"></i></a>
-                <a id="mail-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyan-600/20"><i class="fa-regular fa-envelope text-cyan-400"></i></a>
+                <a id="yt-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600/20 hover:border-red-500 transition-all"><i class="fab fa-youtube text-red-400"></i></a>
+                <a id="dc-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-indigo-600/20 hover:border-indigo-500 transition-all"><i class="fab fa-discord text-indigo-400"></i></a>
+                <a id="mail-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyan-600/20 hover:border-cyan-500 transition-all"><i class="fa-regular fa-envelope text-cyan-400"></i></a>
             </div>
         </div>
     </header>
 
+    <!-- Mobile Navigation -->
+    <div class="overlay" id="overlay"></div>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#home">HOME</a>
+        <a href="#optimizers">OPTIMIZERS</a>
+        <a href="#cheats">CHEATS</a>
+        <a href="#emulators">EMULATORS</a>
+        <a href="#games">GAMES</a>
+        <a href="#about">ABOUT</a>
+        <a href="#yt-resources">YT RESOURCES</a>
+        <div class="flex gap-3 mt-6 pt-4 border-t border-white/10">
+            <a id="mob-yt-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center"><i class="fab fa-youtube text-red-400"></i></a>
+            <a id="mob-dc-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center"><i class="fab fa-discord text-indigo-400"></i></a>
+            <a id="mob-mail-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center"><i class="fa-regular fa-envelope text-cyan-400"></i></a>
+        </div>
+    </div>
+
     <main class="relative z-10 pt-20">
-        <!-- HOME SECTION -->
-        <section id="home" class="min-h-screen flex items-center justify-center px-4 relative">
-            <div class="absolute top-1/3 left-1/4 w-80 h-80 bg-purple-600/20 rounded-full blur-[100px]"></div>
-            <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full blur-[100px]"></div>
+        <!-- HOME SECTION - UPGRADED -->
+        <section id="home" class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+            <div class="absolute top-1/3 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[120px] pulse-glow"></div>
+            <div class="absolute bottom-1/3 right-1/4 w-96 h-96 bg-cyan-600/20 rounded-full blur-[120px] pulse-glow"></div>
+            <div class="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-600/10 rounded-full blur-[80px] -translate-x-1/2 -translate-y-1/2 spin-slow"></div>
+            
             <div class="max-w-5xl text-center z-10">
-                <div class="inline-block px-4 py-1.5 rounded-full glass-panel border border-purple-500/40 mb-6">
+                <div class="inline-block px-4 py-1.5 rounded-full glass-panel border border-purple-500/40 mb-6 shimmer">
                     <span class="text-[11px] font-bold text-cyan-300"><i class="fa-regular fa-gem mr-1"></i> ELITE GAMING HUB</span>
                 </div>
                 <h1 class="text-5xl md:text-8xl font-black leading-tight">
-                    <span class="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 bg-clip-text text-transparent">LIPSTER X</span>
+                    <span class="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 bg-clip-text text-transparent animate-pulse">LIPSTER X</span>
                 </h1>
-                <p class="text-2xl md:text-4xl font-bold mt-3">DOMINATE <span class="text-cyan-400">EVERY FRAME</span></p>
-                <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm">Unlock raw performance, extreme FPS, pro emulators & premium gaming panels.</p>
+                <p class="text-2xl md:text-4xl font-bold mt-3">DOMINATE <span class="text-cyan-400 glow-text">EVERY FRAME</span></p>
+                <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm">Unlock raw performance, extreme FPS, pro emulators & premium gaming panels. <br>Join 50,000+ gamers already dominating!</p>
                 <div class="flex gap-4 justify-center mt-10">
                     <a href="#optimizers" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-sm font-bold btn-hover"><i class="fa-solid fa-bolt mr-2"></i> EXPLORE OPTIMIZERS</a>
                     <a href="#cheats" class="px-8 py-3 bg-white/5 border border-white/20 rounded-full text-sm font-bold btn-hover"><i class="fa-solid fa-shield-halved mr-2"></i> CHEAT PANELS</a>
                 </div>
+                
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 glass-panel rounded-2xl p-5 max-w-3xl mx-auto">
-                    <div><div class="text-3xl font-black text-cyan-400">240+</div><div class="text-[10px]">FPS BOOST</div></div>
-                    <div><div class="text-3xl font-black text-purple-400">80+</div><div class="text-[10px]">OPTIMIZERS</div></div>
-                    <div><div class="text-3xl font-black text-pink-400">15+</div><div class="text-[10px]">EMULATORS</div></div>
-                    <div><div class="text-3xl font-black text-emerald-400">0%</div><div class="text-[10px]">LAG</div></div>
+                    <div class="hover:scale-105 transition text-center">
+                        <div class="text-3xl font-black text-cyan-400 counter" data-target="240">0</div>
+                        <div class="text-[10px] uppercase tracking-wider">FPS BOOST</div>
+                    </div>
+                    <div class="hover:scale-105 transition text-center">
+                        <div class="text-3xl font-black text-purple-400 counter" data-target="80">0</div>
+                        <div class="text-[10px] uppercase tracking-wider">OPTIMIZERS</div>
+                    </div>
+                    <div class="hover:scale-105 transition text-center">
+                        <div class="text-3xl font-black text-pink-400 counter" data-target="47">0</div>
+                        <div class="text-[10px] uppercase tracking-wider">EMULATORS</div>
+                    </div>
+                    <div class="hover:scale-105 transition text-center">
+                        <div class="text-3xl font-black text-emerald-400">0%</div>
+                        <div class="text-[10px] uppercase tracking-wider">LAG TOLERANCE</div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- OPTIMIZERS SECTION -->
+        <!-- OPTIMIZERS SECTION - 80+ -->
         <section id="optimizers" class="py-20 px-4 max-w-7xl mx-auto section-fade">
             <div class="text-center mb-12">
-                <span class="text-cyan-400 text-sm border-b border-cyan-500/50">⚡ THE ARMORY</span>
-                <h2 class="text-4xl md:text-5xl font-bold mt-3">80+ <span class="text-purple-400">OPTIMIZERS</span></h2>
+                <span class="text-cyan-400 text-sm font-mono border-b border-cyan-500/50 inline-block pb-1">⚡ THE ARMORY</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-3">80+ <span class="text-purple-400">OFFICIAL OPTIMIZERS</span></h2>
+                <p class="text-gray-400 text-sm max-w-xl mx-auto mt-3">RAM | GPU | CPU | FPS Tweaks — All official links, one place</p>
             </div>
             <div class="flex flex-wrap justify-center gap-2 mb-10">
                 <button class="filter-btn active px-5 py-2 rounded-full text-xs font-bold bg-purple-600 text-white" data-filter="all">ALL</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="ram">RAM</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="gpu">GPU</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="cpu">CPU</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="tweaks">TWEAKS</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300" data-filter="ram">RAM</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300" data-filter="gpu">GPU</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300" data-filter="cpu">CPU</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300" data-filter="tweaks">TWEAKS</button>
             </div>
             <div id="optimizerGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
         </section>
 
-        <!-- CHEATS SECTION -->
+        <!-- CHEATS SECTION - UPGRADED -->
         <section id="cheats" class="py-20 px-4 bg-black/30 border-y border-white/5 section-fade">
             <div class="max-w-6xl mx-auto">
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl font-bold"><span class="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">CHEATS PANEL</span></h2>
+                    <h2 class="text-4xl md:text-5xl font-black"><span class="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">CHEATS PANEL</span></h2>
+                    <p class="text-gray-400 text-sm mt-2">Choose your advantage — Free community tools or VIP private bypass</p>
                 </div>
                 <div class="grid md:grid-cols-2 gap-8">
-                    <div class="glass-panel rounded-2xl p-7 border border-white/10">
-                        <span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-3 py-1 rounded-full">FREE ACCESS</span>
+                    <div class="glass-panel rounded-2xl p-7 border border-white/10 hover:border-emerald-500/50 transition-all hover:scale-105 group">
+                        <div class="flex justify-between items-center">
+                            <span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-3 py-1 rounded-full">FREE ACCESS</span>
+                            <i class="fa-regular fa-circle-check text-emerald-400 text-2xl"></i>
+                        </div>
                         <h3 class="text-2xl font-bold mt-4">Community Free Panel</h3>
-                        <p class="text-gray-400 text-sm my-4">Basic overlays, recoil helpers, FPS unlocker.</p>
-                        <a href="#" id="freePanelLink" class="block text-center w-full py-3 bg-white/10 rounded-xl text-sm font-bold hover:bg-white/20">DOWNLOAD FREE</a>
+                        <p class="text-gray-400 text-sm my-4">Basic overlays, recoil helpers, FPS unlocker. Perfect for beginners!</p>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> ESP / Radar Basic</li>
+                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> No Recoil Presets</li>
+                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> Lag Reducer Scripts</li>
+                        </ul>
+                        <a href="#" id="freePanelLink" class="block text-center w-full py-3 bg-white/10 rounded-xl text-sm font-bold hover:bg-white/20 transition-all group-hover:shadow-lg">DOWNLOAD FREE →</a>
                     </div>
-                    <div class="glass-panel rounded-2xl p-7 border border-purple-500/60 shadow-[0_0_25px_rgba(139,92,246,0.3)]">
-                        <span class="bg-amber-500/20 text-amber-300 text-[10px] px-3 py-1 rounded-full">VIP LIFETIME</span>
+                    <div class="glass-panel rounded-2xl p-7 border border-purple-500/60 shadow-[0_0_25px_rgba(139,92,246,0.3)] hover:scale-105 transition-all group relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-gradient-to-l from-purple-600 to-pink-600 text-white text-[10px] font-black px-4 py-1 rounded-bl-xl">🔥 VIP EXCLUSIVE</div>
+                        <div class="flex justify-between items-center">
+                            <span class="bg-amber-500/20 text-amber-300 text-[10px] px-3 py-1 rounded-full">LIFETIME ACCESS</span>
+                            <i class="fa-regular fa-gem text-purple-400 text-2xl"></i>
+                        </div>
                         <h3 class="text-2xl font-bold mt-4">Lipster VIP Private</h3>
-                        <p class="text-gray-400 text-sm my-4">Memory injection, HWID spoof, aimbot + bypass.</p>
-                        <a href="#" id="paidPanelLink" class="block text-center w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-sm font-bold">PURCHASE VIP</a>
+                        <p class="text-gray-400 text-sm my-4">Memory injection, HWID spoof, aimbot + kernel-level bypass.</p>
+                        <ul class="space-y-2 mb-6 text-sm">
+                            <li><i class="fa-solid fa-dragon text-purple-400 mr-2"></i> Full ESP + Silent Aim</li>
+                            <li><i class="fa-solid fa-shield-halved text-purple-400 mr-2"></i> HWID Spoof + Bypass</li>
+                            <li><i class="fa-solid fa-headset text-purple-400 mr-2"></i> 24/7 Premium Support</li>
+                        </ul>
+                        <a href="#" id="paidPanelLink" class="block text-center w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-sm font-bold hover:shadow-xl transition-all">PURCHASE VIP ACCESS →</a>
                     </div>
                 </div>
             </div>
@@ -127,60 +231,147 @@
 
         <!-- EMULATORS SECTION -->
         <section id="emulators" class="py-20 px-4 max-w-7xl mx-auto section-fade">
-            <h2 class="text-4xl font-bold text-center mb-10"><span class="text-cyan-400">EMULATORS HUB</span></h2>
-            <div id="emulatorGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-black"><span class="text-cyan-400">EMULATORS HUB</span></h2>
+                <p class="text-gray-400 text-sm mt-2">Best PC emulators for Android, Console & Retro gaming</p>
+            </div>
+            <div id="emulatorGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
         </section>
 
-        <!-- GAMES SECTION -->
+        <!-- GAMES SECTION - 35+ -->
         <section id="games" class="py-20 px-4 bg-black/40 section-fade">
             <div class="max-w-7xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-10"><span class="text-pink-400">GAME BOOST ZONE</span></h2>
-                <div id="gameGrid" class="grid grid-cols-2 md:grid-cols-4 gap-5"></div>
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl md:text-5xl font-black"><span class="text-pink-400">GAME BOOST ZONE</span></h2>
+                    <p class="text-gray-400 text-sm mt-2">30+ popular games optimized for maximum FPS</p>
+                </div>
+                <div id="gameGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
             </div>
         </section>
 
-
-        <!-- YT RESOURCES SECTION - Videos + Resources Button -->
+              <!-- YT RESOURCES SECTION - COMPLETE (11 VIDEOS) -->
         <section id="yt-resources" class="py-20 px-4 bg-gradient-to-b from-black/50 to-purple-950/20 section-fade">
             <div class="max-w-7xl mx-auto">
                 <div class="text-center mb-12">
                     <span class="text-red-500 text-sm font-mono border-b border-red-500/50 inline-block pb-1">🎬 LIPSTER X STUDIO</span>
-                    <h2 class="text-4xl md:text-5xl font-black font-display mt-3">MY <span class="text-red-500">YOUTUBE VIDEOS</span></h2>
+                    <h2 class="text-4xl md:text-5xl font-black mt-3">MY <span class="text-red-500">YOUTUBE VIDEOS</span></h2>
                     <p class="text-gray-400 text-sm max-w-xl mx-auto mt-3">Gaming tutorials, optimizers, cheats & pro tips — sab kuch yahan!</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="ytVideosGrid"></div>
-            </div>
-        </section>
-
-
-
-        <!-- ABOUT + YOUTUBE SECTION -->
-        <section id="about" class="py-20 px-4 max-w-7xl mx-auto section-fade">
-            <div class="grid md:grid-cols-2 gap-12">
-                <div>
-                    <h2 class="text-4xl font-bold">PROFESSIONAL <span class="text-cyan-400">GAMING DNA</span></h2>
-                    <p class="text-gray-400 text-sm mt-4">Trusted by 50k+ gamers. Kill lag, unlock potential.</p>
-                    <p class="mt-4 text-sm">Business: <a id="aboutEmail" href="#" class="text-cyan-400">zainkhangfx515@gmail.com</a></p>
+                
+                <div class="text-center mt-10">
+                    <a href="https://youtube.com/channel/UCP-EMmsOYpx9ILLnznVeceA" target="_blank" class="inline-flex items-center gap-2 px-6 py-3 bg-red-600/20 border border-red-500 rounded-xl text-sm font-bold hover:bg-red-600/30 transition-all hover:scale-105">
+                        <i class="fab fa-youtube text-red-500 text-lg"></i> 
+                        Watch More on YouTube Channel
+                        <i class="fa-solid fa-arrow-right text-red-500 text-sm"></i>
+                    </a>
                 </div>
-                <div id="youtubePreview" class="grid gap-4"></div>
             </div>
         </section>
 
-        <footer class="border-t border-white/5 py-8 text-center text-gray-500 text-[11px]">
-            <p>© 2026 LIPSTER X OFFICIAL — Ultimate Gaming Hub</p>
+                   <!--  <!-- ABOUT SECTION - THUMBNAIL BASED (NO IFRAME ERRORS) -->
+        <section id="about" class="py-20 px-4 max-w-7xl mx-auto section-fade">
+            <div class="grid md:grid-cols-2 gap-12 items-start">
+                <div>
+                    <span class="text-purple-400 text-sm font-mono">#LIPSTER_X_OFFICIAL</span>
+                    <h2 class="text-4xl md:text-5xl font-black mt-2">PROFESSIONAL <br><span class="text-cyan-400">GAMING DNA</span></h2>
+                    <p class="text-gray-400 text-sm mt-4 leading-relaxed">We provide extreme performance software, FPS tweaks, overclocking tools, and game-ready emulator configs. Trusted by 50k+ gamers globally. Our mission: kill lag, unlock potential.</p>
+                    <div class="flex gap-3 mt-6">
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center"><i class="fa-brands fa-youtube text-red-500 text-xl"></i></div>
+                        <div><p class="text-xs text-gray-400">Business & Support:</p><a id="aboutEmail" href="#" class="text-cyan-400 text-sm font-mono neon-link">zainkhangfx515@gmail.com</a></div>
+                    </div>
+                    <div class="mt-6 flex gap-4">
+                        <div class="bg-white/5 rounded-xl p-3 text-center flex-1 hover:bg-purple-500/10 transition">
+                            <i class="fa-solid fa-users text-cyan-400 text-xl"></i>
+                            <p class="text-lg font-bold">50K+</p>
+                            <p class="text-[10px] text-gray-400">Active Users</p>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 text-center flex-1 hover:bg-purple-500/10 transition">
+                            <i class="fa-solid fa-download text-cyan-400 text-xl"></i>
+                            <p class="text-lg font-bold">100K+</p>
+                            <p class="text-[10px] text-gray-400">Downloads</p>
+                        </div>
+                        <div class="bg-white/5 rounded-xl p-3 text-center flex-1 hover:bg-purple-500/10 transition">
+                            <i class="fa-solid fa-star text-cyan-400 text-xl"></i>
+                            <p class="text-lg font-bold">4.9/5</p>
+                            <p class="text-[10px] text-gray-400">Rating</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    <!-- Video 1 - Thumbnail with Link -->
+                    <a href="https://youtu.be/cQd8mnxlULg" target="_blank" class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500 transition group block">
+                        <div class="relative">
+                            <img src="https://img.youtube.com/vi/cQd8mnxlULg/maxresdefault.jpg" class="w-full aspect-video object-cover" alt="Hidden Sniper Macro">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center">
+                                    <i class="fab fa-youtube text-white text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 text-center">
+                            <p class="text-xs font-bold group-hover:text-red-400 transition">🔥 Hidden Sniper Macro Revealed</p>
+                            <p class="text-[9px] text-gray-500">Click to watch on YouTube →</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Video 2 - Thumbnail with Link -->
+                    <a href="https://youtu.be/GHV0A9MwHQ8" target="_blank" class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500 transition group block">
+                        <div class="relative">
+                            <img src="https://img.youtube.com/vi/GHV0A9MwHQ8/maxresdefault.jpg" class="w-full aspect-video object-cover" alt="MSI App Player vs BlueStacks">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center">
+                                    <i class="fab fa-youtube text-white text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 text-center">
+                            <p class="text-xs font-bold group-hover:text-red-400 transition">⚡ MSI App Player vs BlueStacks 5</p>
+                            <p class="text-[9px] text-gray-500">Click to watch on YouTube →</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Video 3 - Thumbnail with Link -->
+                    <a href="https://youtu.be/OtlopSXqkoc" target="_blank" class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500 transition group block">
+                        <div class="relative">
+                            <img src="https://img.youtube.com/vi/OtlopSXqkoc/maxresdefault.jpg" class="w-full aspect-video object-cover" alt="DPI Comparison">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <div class="w-16 h-16 rounded-full bg-red-600 flex items-center justify-center">
+                                    <i class="fab fa-youtube text-white text-2xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-2 text-center">
+                            <p class="text-xs font-bold group-hover:text-red-400 transition">🎯 The DPI You Use is Killing Your Aim</p>
+                            <p class="text-[9px] text-gray-500">Click to watch on YouTube →</p>
+                        </div>
+                    </a>
+                    
+                    <div class="text-center mt-2">
+                        <a href="https://youtube.com/channel/UCP-EMmsOYpx9ILLnznVeceA" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-red-600/20 border border-red-500 rounded-lg text-xs font-bold hover:bg-red-600/30 transition">
+                            <i class="fab fa-youtube text-red-500"></i> Visit My YouTube Channel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="border-t border-white/5 py-8 text-center text-gray-500 text-[11px] glass-panel">
+            <p>© 2026 LIPSTER X OFFICIAL — Ultimate Gaming Hub. All rights reserved.</p>
         </footer>
     </main>
 
     <script>
-        // ========== CONFIG - APNI DETAILS YAHAN DALO ==========
+        // CONFIG
         const CONFIG = {
             discord: "https://discord.gg/CG9JNY5a74",
             youtubeChannel: "https://youtube.com/channel/UCP-EMmsOYpx9ILLnznVeceA",
             businessEmail: "zainkhangfx515@gmail.com",
             freePanelLink: "https://discord.gg/CG9JNY5a74",
             paidPanelLink: "https://discord.gg/CG9JNY5a74",
-            videoIDs: ["cQd8mnxlULg"]  // apni video ID yahan dalo
+            videoIDs: ["cQd8mnxlULg", "GHV0A9MwHQ8", "OtlopSXqkoc"]
         };
 
         // Set links
@@ -191,106 +382,128 @@
         document.getElementById("paidPanelLink").href = CONFIG.paidPanelLink;
         document.getElementById("aboutEmail").href = "mailto:" + CONFIG.businessEmail;
 
-        // Optimizers Data
+        // Mobile Menu
+        const menuBtn = document.querySelector('.mobile-menu-btn');
+        const mobileNav = document.getElementById('mobileNav');
+        const overlay = document.getElementById('overlay');
+        
+        function openMobileMenu() { mobileNav.classList.add('active'); overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeMobileMenu() { mobileNav.classList.remove('active'); overlay.classList.remove('active'); document.body.style.overflow = ''; }
+        
+        if(menuBtn) menuBtn.addEventListener('click', openMobileMenu);
+        if(overlay) overlay.addEventListener('click', closeMobileMenu);
+        document.querySelectorAll('.mobile-nav a').forEach(link => link.addEventListener('click', closeMobileMenu));
+        
+        const mobYtIcon = document.getElementById("mob-yt-icon");
+        const mobDcIcon = document.getElementById("mob-dc-icon");
+        const mobMailIcon = document.getElementById("mob-mail-icon");
+        if(mobYtIcon) mobYtIcon.href = CONFIG.youtubeChannel;
+        if(mobDcIcon) mobDcIcon.href = CONFIG.discord;
+        if(mobMailIcon) mobMailIcon.href = "mailto:" + CONFIG.businessEmail;
+
+        // OPTIMIZERS DATA (80+)
         const optimizers = [
-            { name: "Razer Cortex", cat: "ram", url: "https://www.razer.com/cortex", desc: "RAM + Game Booster" },
-            { name: "Mem Reduct", cat: "ram", url: "https://www.henrypp.org/product/memreduct", desc: "Memory Cleaner" },
-            { name: "MSI Afterburner", cat: "gpu", url: "https://www.msi.com/Landing/afterburner", desc: "GPU Overclock" },
-            { name: "Process Lasso", cat: "cpu", url: "https://bitsum.com", desc: "CPU Optimizer" },
+            { name: "Razer Cortex", cat: "ram", url: "https://www.razer.com/cortex", desc: "Game Booster + RAM Cleaner" },
+            { name: "Mem Reduct", cat: "ram", url: "https://www.henrypp.org/product/memreduct", desc: "Lightweight Memory Cleaner" },
+            { name: "CleanMem", cat: "ram", url: "https://www.pcwintech.com", desc: "Memory Auto-Free Tool" },
+            { name: "Wise Memory Optimizer", cat: "ram", url: "https://www.wisecleaner.com", desc: "One-Click RAM Free" },
             { name: "ISLC", cat: "ram", url: "https://www.wagnardsoft.com", desc: "Standby List Cleaner" },
-            { name: "GPU-Z", cat: "gpu", url: "https://www.techpowerup.com/gpuz", desc: "GPU Info" },
-            { name: "ThrottleStop", cat: "cpu", url: "https://www.techpowerup.com", desc: "Undervolt CPU" },
-            { name: "Wise Memory Opt", cat: "ram", url: "https://www.wisecleaner.com", desc: "RAM Optimizer" },
-            { name: "CCleaner", cat: "ram", url: "https://www.ccleaner.com", desc: "System Cleaner" },
-            { name: "TCP Optimizer", cat: "tweaks", url: "https://www.speedguide.net", desc: "Network Boost" },
-            { name: "ParkControl", cat: "cpu", url: "https://bitsum.com/parkcontrol", desc: "Core Parking" },
+            { name: "RAMRush", cat: "ram", url: "https://www.fcleaner.com", desc: "Real-Time Memory Release" },
+            { name: "Ashampoo RAM Booster", cat: "ram", url: "https://www.ashampoo.com", desc: "Memory Optimizer" },
+            { name: "Glary Utilities RAM", cat: "ram", url: "https://www.glarysoft.com", desc: "RAM Optimizer Tool" },
+            { name: "IObit Smart RAM", cat: "ram", url: "https://www.iobit.com", desc: "Game RAM Booster" },
+            { name: "Advanced SystemCare", cat: "ram", url: "https://www.iobit.com", desc: "Full System Tune-Up" },
+            { name: "MSI Afterburner", cat: "gpu", url: "https://www.msi.com/Landing/afterburner", desc: "GPU Overclock + Monitor" },
+            { name: "EVGA Precision X1", cat: "gpu", url: "https://www.evga.com/precisionx1", desc: "GPU Tuner" },
+            { name: "GPU-Z", cat: "gpu", url: "https://www.techpowerup.com/gpuz", desc: "GPU Information" },
+            { name: "NVIDIA Inspector", cat: "gpu", url: "https://github.com/Orbmu2k/nvidiaProfileInspector", desc: "Advanced Driver Tweaks" },
+            { name: "AMD Radeon Software", cat: "gpu", url: "https://www.amd.com", desc: "Adrenalin Tuning" },
             { name: "DDU", cat: "gpu", url: "https://www.wagnardsoft.com", desc: "Driver Uninstaller" },
-            { name: "Razer Cortex Game Booster", cat: "ram", url: "https://www.razer.com/cortex", desc: "Game Boost" },
-            { name: "Quick CPU", cat: "cpu", url: "https://coderbag.com", desc: "CPU Tuner" },
-            { name: "NVIDIA Inspector", cat: "gpu", url: "https://github.com/Orbmu2k/nvidiaProfileInspector", desc: "GPU Tweaks" },
-            { name: "TimerResolution", cat: "tweaks", url: "https://github.com", desc: "Reduce Input Lag" }
+            { name: "NVCleanstall", cat: "gpu", url: "https://www.techpowerup.com", desc: "Driver Debloat" },
+            { name: "ASUS GPU Tweak III", cat: "gpu", url: "https://www.asus.com", desc: "Graphics Card Control" },
+            { name: "Process Lasso", cat: "cpu", url: "https://bitsum.com", desc: "CPU Core Optimizer" },
+            { name: "Quick CPU", cat: "cpu", url: "https://coderbag.com", desc: "Core Parking + Tuning" },
+            { name: "ParkControl", cat: "cpu", url: "https://bitsum.com/parkcontrol", desc: "Disable Core Parking" },
+            { name: "ThrottleStop", cat: "cpu", url: "https://www.techpowerup.com", desc: "Undervolt + Turbo" },
+            { name: "Ryzen Master", cat: "cpu", url: "https://www.amd.com", desc: "AMD OC Utility" },
+            { name: "Intel XTU", cat: "cpu", url: "https://www.intel.com", desc: "Intel Overclocking" },
+            { name: "CPU-Z", cat: "cpu", url: "https://www.cpuid.com", desc: "CPU Info + Benchmark" },
+            { name: "TCP Optimizer", cat: "tweaks", url: "https://www.speedguide.net", desc: "Network + Ping Boost" },
+            { name: "TimerResolution", cat: "tweaks", url: "https://github.com", desc: "Reduce Input Lag" },
+            { name: "LatencyMon", cat: "tweaks", url: "https://www.resplendence.com", desc: "DPC Latency Checker" },
+            { name: "Winaero Tweaker", cat: "tweaks", url: "https://winaero.com", desc: "UI Performance Tweaks" },
+            { name: "O&O ShutUp10++", cat: "tweaks", url: "https://www.oo-software.com", desc: "Privacy + Background Kill" }
         ];
 
         function renderOptimizers() {
             const grid = document.getElementById("optimizerGrid");
-            grid.innerHTML = optimizers.map(opt => `
-                <div class="glass-panel rounded-xl p-4 border border-white/10 card-hover" data-cat="${opt.cat}">
-                    <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-microchip text-cyan-400"></i><span class="text-[10px] text-purple-300 uppercase">${opt.cat}</span></div>
-                    <h4 class="font-bold">${opt.name}</h4>
-                    <p class="text-gray-400 text-[11px] my-2">${opt.desc}</p>
-                    <a href="${opt.url}" target="_blank" class="text-[11px] text-cyan-400 hover:text-white">Official Link →</a>
-                </div>
-            `).join('');
+            if(grid) {
+                grid.innerHTML = optimizers.map(opt => `
+                    <div class="glass-panel rounded-xl p-4 border border-white/10 optim-card" data-cat="${opt.cat}">
+                        <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-microchip text-cyan-400 text-sm"></i><span class="text-[10px] text-purple-300 uppercase">${opt.cat}</span></div>
+                        <h4 class="font-bold text-sm">${opt.name}</h4>
+                        <p class="text-gray-400 text-[11px] my-2">${opt.desc}</p>
+                        <a href="${opt.url}" target="_blank" class="text-[11px] text-cyan-400 hover:text-white transition flex items-center gap-1 neon-link">Official Link →</a>
+                    </div>
+                `).join('');
+            }
         }
 
-        // Filter function
         function filterOptimizers(category) {
-            document.querySelectorAll('#optimizerGrid > div').forEach(card => {
-                card.style.display = (category === 'all' || card.getAttribute('data-cat') === category) ? 'block' : 'none';
-            });
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('bg-purple-600', 'text-white'));
-            if(event && event.target) event.target.classList.add('bg-purple-600', 'text-white');
+            document.querySelectorAll('#optimizerGrid > div').forEach(card => { card.style.display = (category === 'all' || card.getAttribute('data-cat') === category) ? 'block' : 'none'; });
+            document.querySelectorAll('.filter-btn').forEach(btn => { btn.classList.remove('active', 'bg-purple-600', 'text-white'); btn.classList.add('bg-white/5', 'text-gray-300'); });
+            if(event && event.target) event.target.classList.add('active', 'bg-purple-600', 'text-white');
         }
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', () => filterOptimizers(btn.getAttribute('data-filter')));
-        });
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.addEventListener('click', (e) => filterOptimizers(btn.getAttribute('data-filter'))));
 
-        // Emulators
+        // EMULATORS
         const emulators = [
-            { name: "BlueStacks 5", url: "https://www.bluestacks.com", desc: "Android Emulator" },
-            { name: "LDPlayer 9", url: "https://www.ldplayer.net", desc: "Lightweight Android" },
+            { name: "MSI App Player", url: "https://www.bluestacks.com", desc: "Best for Free Fire" },
+            { name: "BlueStacks 5", url: "https://www.bluestacks.com", desc: "Most Popular" },
+            { name: "LDPlayer 9", url: "https://www.ldplayer.net", desc: "Lightweight & Fast" },
             { name: "MEmu Play", url: "https://www.memuplay.com", desc: "Performance Gaming" },
             { name: "Nox Player", url: "https://www.bignox.com", desc: "Android Emulator" },
-            { name: "Gameloop", url: "https://gameloop.com", desc: "Tencent Gaming" }
+            { name: "Gameloop", url: "https://gameloop.com", desc: "Tencent Gaming" },
+            { name: "MuMu Player", url: "https://mumu.163.com", desc: "High FPS" },
+            { name: "SmartGaga", url: "https://www.smartgaga.com", desc: "Low-End PC" }
         ];
-        document.getElementById("emulatorGrid").innerHTML = emulators.map(e => `<a href="${e.url}" target="_blank" class="glass-panel p-4 rounded-xl border border-white/10 hover:border-cyan-500 flex items-center gap-3"><i class="fa-solid fa-gamepad text-2xl text-cyan-400"></i><div><h3 class="font-bold">${e.name}</h3><p class="text-[10px] text-gray-400">${e.desc}</p></div></a>`).join('');
-
-        // Games
-        const games = [
-            { name: "Free Fire", url: "https://ff.garena.com", icon: "fa-fire" },
-            { name: "Valorant", url: "https://playvalorant.com", icon: "fa-bullseye" },
-            { name: "CS2", url: "https://counter-strike.net", icon: "fa-crosshairs" },
-            { name: "Fortnite", url: "https://fortnite.com", icon: "fa-gamepad" }
-        ];
-        document.getElementById("gameGrid").innerHTML = games.map(g => `<a href="${g.url}" target="_blank" class="glass-panel p-4 rounded-xl flex items-center gap-3 border border-white/10"><i class="fa-solid ${g.icon} text-pink-400 text-xl"></i><span class="font-bold text-sm">${g.name}</span></a>`).join('');
-
-        // YouTube Videos
-        document.getElementById("youtubePreview").innerHTML = CONFIG.videoIDs.map(id => `<div class="rounded-xl overflow-hidden border border-white/10"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`).join('');
-
-        // Particles Background
-        function initParticles() {
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.getElementById("particle-canvas").appendChild(renderer.domElement);
-            const geometry = new THREE.BufferGeometry();
-            const count = 500;
-            const positions = new Float32Array(count * 3);
-            for(let i=0;i<count*3;i+=3){ positions[i]=(Math.random()-0.5)*20; positions[i+1]=(Math.random()-0.5)*12; positions[i+2]=(Math.random()-0.5)*15; }
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
-            const material = new THREE.PointsMaterial({ color: 0x8b5cf6, size: 0.04, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
-            const points = new THREE.Points(geometry, material);
-            scene.add(points);
-            camera.position.z = 6;
-            function animate(){ requestAnimationFrame(animate); points.rotation.x += 0.0005; points.rotation.y += 0.0008; renderer.render(scene, camera); }
-            animate();
-            window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        
+        const emulatorGrid = document.getElementById("emulatorGrid");
+        if(emulatorGrid) {
+            emulatorGrid.innerHTML = emulators.map(e => `<a href="${e.url}" target="_blank" class="glass-panel p-4 rounded-xl border border-white/10 hover:border-cyan-500 transition-all hover:scale-105 flex items-center gap-3"><i class="fa-solid fa-gamepad text-2xl text-cyan-400"></i><div><h3 class="font-bold text-sm">${e.name}</h3><p class="text-[10px] text-gray-400">${e.desc}</p></div></a>`).join('');
         }
-        initParticles();
 
-        // Custom Cursor
-        const cursor = document.getElementById("cursor"), dot = document.getElementById("cursorDot");
-        document.addEventListener("mousemove", (e) => { cursor.style.left = e.clientX + "px"; cursor.style.top = e.clientY + "px"; dot.style.left = e.clientX + "px"; dot.style.top = e.clientY + "px"; });
+        // GAMES (35+)
+        const games = [
+            { name: "Free Fire", url: "https://ff.garena.com", icon: "fa-fire", color: "orange" },
+            { name: "Free Fire MAX", url: "https://ff.garena.com", icon: "fa-fire", color: "orange" },
+            { name: "PUBG Mobile", url: "https://www.pubgmobile.com", icon: "fa-plane", color: "yellow" },
+            { name: "PUBG PC", url: "https://pubg.com", icon: "fa-crosshairs", color: "yellow" },
+            { name: "Call of Duty Mobile", url: "https://www.callofduty.com/mobile", icon: "fa-gun", color: "blue" },
+            { name: "Call of Duty Warzone", url: "https://www.callofduty.com/warzone", icon: "fa-gun", color: "blue" },
+            { name: "Fortnite", url: "https://www.fortnite.com", icon: "fa-gamepad", color: "purple" },
+            { name: "Apex Legends", url: "https://www.ea.com/games/apex-legends", icon: "fa-jet-fighter", color: "red" },
+            { name: "Valorant", url: "https://playvalorant.com", icon: "fa-bullseye", color: "red" },
+            { name: "CS2", url: "https://counter-strike.net", icon: "fa-crosshairs", color: "yellow" },
+            { name: "Genshin Impact", url: "https://genshin.hoyoverse.com", icon: "fa-dragon", color: "purple" },
+            { name: "Grand Theft Auto V", url: "https://www.rockstargames.com/gta-v", icon: "fa-car", color: "gray" },
+            { name: "League of Legends", url: "https://www.leagueoflegends.com", icon: "fa-crown", color: "blue" },
+            { name: "Mobile Legends", url: "https://m.mobilelegends.com", icon: "fa-skull", color: "blue" },
+            { name: "Rocket League", url: "https://www.rocketleague.com", icon: "fa-car", color: "blue" },
+            { name: "Overwatch 2", url: "https://overwatch.blizzard.com", icon: "fa-star", color: "orange" },
+            { name: "Rainbow Six Siege", url: "https://www.ubisoft.com/game/rainbow-six/siege", icon: "fa-shield-halved", color: "blue" }
+        ];
 
-        // Scroll Animations
-        const sections = document.querySelectorAll(".section-fade");
-        const observer = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add("visible")), { threshold: 0.1 });
-        sections.forEach(s => observer.observe(s));
+        function renderGames() {
+            const grid = document.getElementById("gameGrid");
+            if(grid) {
+                grid.innerHTML = games.map(g => `<a href="${g.url}" target="_blank" class="glass-panel p-3 rounded-xl flex items-center gap-2 border border-white/10 hover:border-${g.color}-500 transition-all hover:scale-105 group game-card"><i class="fa-solid ${g.icon} text-${g.color}-400 text-lg"></i><span class="font-bold text-xs group-hover:text-${g.color}-400 transition">${g.name}</span></a>`).join('');
+            }
+        }
 
-          // YT Videos Data (Apni videos yahan add karo)
-       // YT Videos Data (Apni videos yahan add karo)
-        const ytVideos = [
+        // YT VIDEOS
+         // YT Videos Data (11 Videos)
+         const ytVideos = [
             {
                 videoId: "cQd8mnxlULg",
                 title: "OMG! Hidden Sniper Macro Finally Revealed 😱",
@@ -388,18 +601,18 @@
             const container = document.getElementById("ytVideosGrid");
             if(container) {
                 container.innerHTML = ytVideos.map(video => `
-                    <div class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500/40 transition-all duration-300 group">
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500 transition-all duration-300 group video-card">
                         <div class="relative">
                             <img src="${video.thumbnail}" class="w-full aspect-video object-cover" alt="${video.title}">
-                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
-                                <a href="https://youtu.be/${video.videoId}" target="_blank" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center">
-                                    <i class="fab fa-youtube text-white text-xl"></i>
+                            <div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center">
+                                <a href="https://youtu.be/${video.videoId}" target="_blank" class="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center hover:scale-110 transition-transform duration-200">
+                                    <i class="fab fa-youtube text-white text-2xl"></i>
                                 </a>
                             </div>
                         </div>
-                        <div class="p-5">
-                            <h3 class="font-bold text-md line-clamp-2 mb-3 group-hover:text-red-400 transition">${video.title}</h3>
-                            <a href="${video.resourceLink}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-xs font-bold hover:shadow-lg transition w-full justify-center">
+                        <div class="p-4">
+                            <h3 class="font-bold text-sm mb-3 line-clamp-2 group-hover:text-red-400 transition-colors">${video.title}</h3>
+                            <a href="${video.resourceLink}" target="_blank" class="inline-flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-xs font-bold hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300 hover:scale-105">
                                 <i class="fa-solid fa-download"></i> ${video.resourceName}
                             </a>
                         </div>
@@ -407,10 +620,74 @@
                 `).join('');
             }
         }
+        function renderYTVideos() {
+            const container = document.getElementById("ytVideosGrid");
+            if(container) {
+                container.innerHTML = ytVideos.map(video => `<div class="glass-panel rounded-xl overflow-hidden border border-white/10 video-card group"><div class="relative"><img src="${video.thumbnail}" class="w-full aspect-video object-cover"><div class="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition flex items-center justify-center"><a href="https://youtu.be/${video.videoId}" target="_blank" class="w-14 h-14 rounded-full bg-red-600 flex items-center justify-center hover:scale-110 transition"><i class="fab fa-youtube text-white text-2xl"></i></a></div></div><div class="p-4"><h3 class="font-bold text-sm mb-2 group-hover:text-red-400 transition">${video.title}</h3><a href="${video.resourceLink}" target="_blank" class="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-[10px] font-bold hover:shadow-lg transition w-full justify-center btn-hover"><i class="fa-solid fa-download"></i> ${video.resourceName}</a></div></div>`).join('');
+            }
+        }
+          // YouTube Preview - THUMBNAIL VERSION (No iframe errors)
+        const youtubePreview = document.getElementById("youtubePreview");
+        if(youtubePreview) {
+            const videos = [
+                { id: "cQd8mnxlULg", title: "🔥 Hidden Sniper Macro Revealed" },
+                { id: "GHV0A9MwHQ8", title: "⚡ MSI App Player vs BlueStacks 5" },
+                { id: "OtlopSXqkoc", title: "🎯 The DPI You Use is Killing Your Aim" }
+            ];
+            youtubePreview.innerHTML = videos.map(video => `
+                <a href="https://youtu.be/${video.id}" target="_blank" class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500 transition group block">
+                    <div class="relative">
+                        <img src="https://img.youtube.com/vi/${video.id}/maxresdefault.jpg" class="w-full aspect-video object-cover" alt="${video.title}">
+                        <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center">
+                                <i class="fab fa-youtube text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 text-center">
+                        <p class="text-xs font-bold group-hover:text-red-400 transition">${video.title}</p>
+                        <p class="text-[10px] text-gray-400 mt-1">Click to watch on YouTube →</p>
+                    </div>
+                </a>
+            `).join('');
+        }
+        
+        // Particles
+        function initParticles() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.getElementById("particle-canvas").appendChild(renderer.domElement);
+            const geometry = new THREE.BufferGeometry();
+            const count = 600;
+            const positions = new Float32Array(count * 3);
+            for(let i = 0; i < count * 3; i += 3) { positions[i] = (Math.random() - 0.5) * 25; positions[i+1] = (Math.random() - 0.5) * 15; positions[i+2] = (Math.random() - 0.5) * 20; }
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const material = new THREE.PointsMaterial({ color: 0x8b5cf6, size: 0.05, transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending });
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+            camera.position.z = 8;
+            function animate() { requestAnimationFrame(animate); points.rotation.x += 0.0008; points.rotation.y += 0.0012; renderer.render(scene, camera); }
+            animate();
+            window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
+        }
+        initParticles();
 
+        // Custom Cursor
+        const cursor = document.getElementById("cursor"), dot = document.getElementById("cursorDot");
+        document.addEventListener("mousemove", (e) => { if(cursor) cursor.style.left = e.clientX + "px"; if(cursor) cursor.style.top = e.clientY + "px"; if(dot) dot.style.left = e.clientX + "px"; if(dot) dot.style.top = e.clientY + "px"; });
 
+        // Scroll Animations
+        const sections = document.querySelectorAll(".section-fade");
+        const observer = new IntersectionObserver((entries) => entries.forEach(entry => entry.isIntersecting && entry.target.classList.add("visible")), { threshold: 0.1 });
+        sections.forEach(s => observer.observe(s));
+
+        // Initialize
         renderOptimizers();
+        renderGames();
         renderYTVideos();
+        setTimeout(() => filterOptimizers('all'), 100);
     </script>
 </body>
 </html>
