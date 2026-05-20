@@ -1,338 +1,259 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>LIPSTER X OFFICIAL</title>
-    <link rel="icon" type="image/jpeg" href="https://yt3.googleusercontent.com/QR5K1nDO7EeGBz2OkRMlgmjqgzi4y5mfvyqM05TWtKdKFQGSuWOJf_kKvqY5TbGoEcya03Lqsg=s160-c-k-c0x00ffffff-no-rj">
-    <!-- Tailwind + Fonts + Icons -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIPSTER X OFFICIAL - Ultimate Gaming Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Three.js Particle System -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         * { cursor: none; }
-        body { background: #05050A; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        body { background: #05050A; font-family: 'Inter', sans-serif; }
+        .custom-cursor { width: 28px; height: 28px; border: 2px solid #06b6d4; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+        .custom-dot { width: 6px; height: 6px; background: #ec4899; border-radius: 50%; position: fixed; pointer-events: none; z-index: 9999; transform: translate(-50%, -50%); }
+        .glass-panel { background: rgba(10, 10, 18, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(139, 92, 246, 0.2); }
+        .section-fade { opacity: 0; transform: translateY(28px); transition: all 0.7s ease; }
+        .section-fade.visible { opacity: 1; transform: translateY(0); }
+        .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); transition: all 0.3s; }
         ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #0a0a0f; }
         ::-webkit-scrollbar-thumb { background: #8b5cf6; border-radius: 10px; }
-        .custom-cursor, .custom-dot { position: fixed; pointer-events: none; z-index: 9999; transition: all 0.1s linear; }
-        .custom-cursor { width: 28px; height: 28px; border: 2px solid #06b6d4; border-radius: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
-        .custom-dot { width: 6px; height: 6px; background: #ec4899; border-radius: 50%; transform: translate(-50%, -50%); }
-        .glass-panel { background: rgba(10, 10, 18, 0.65); backdrop-filter: blur(12px); border: 1px solid rgba(139, 92, 246, 0.2); }
-        .btn-hover { transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-        .btn-hover:hover { transform: translateY(-3px); box-shadow: 0 0 20px rgba(139, 92, 246, 0.5); }
-        .section-fade { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
-        .section-fade.visible { opacity: 1; transform: translateY(0); }
-        .glow-text { text-shadow: 0 0 8px #8b5cf6, 0 0 2px #a78bfa; }
-        .card-hover { transition: all 0.25s ease; }
-        .card-hover:hover { border-color: #06b6d4; box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.2); transform: scale(1.01); }
-        .neon-border { position: relative; overflow: hidden; }
-        .neon-border::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; background: linear-gradient(135deg, #8b5cf6, #ec4899, #06b6d4); mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
-        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
-        .animate-spin-slow { animation: spin-slow 20s linear infinite; }
-        button, a, .hover-target { cursor: none; }
+        button, a { cursor: none; }
     </style>
 </head>
 <body class="text-white">
 
-    <!-- custom cursors -->
     <div class="custom-cursor hidden md:block" id="cursor"></div>
     <div class="custom-dot hidden md:block" id="cursorDot"></div>
-
-    <!-- Particle canvas background -->
     <div id="particle-canvas" class="fixed inset-0 z-0 pointer-events-none"></div>
 
-    <!-- PREMIUM HEADER : lipster X + 3 icons -->
+    <!-- HEADER -->
     <header class="fixed top-0 left-0 w-full z-50 glass-panel border-b border-white/10 py-3 px-6">
         <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center gap-3 group">
-               <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-2 ring-purple-500/50">
-    <img src="https://yt3.googleusercontent.com/QR5K1nDO7EeGBz2OkRMlgmjqgzi4y5mfvyqM05TWtKdKFQGSuWOJf_kKvqY5TbGoEcya03Lqsg=s160-c-k-c0x00ffffff-no-rj" class="w-full h-full object-cover">
-</div>
-                <span class="font-display font-bold text-xl tracking-wide bg-gradient-to-r from-white via-purple-200 to-cyan-300 bg-clip-text text-transparent">LIPSTER <span class="text-purple-400">X</span></span>
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-400 flex items-center justify-center shadow-lg">
+                    <span class="font-black text-white text-xl">LX</span>
+                </div>
+                <span class="font-bold text-xl bg-gradient-to-r from-white via-purple-200 to-cyan-300 bg-clip-text text-transparent">LIPSTER <span class="text-purple-400">X</span></span>
             </div>
-            <!-- desktop nav -->
-            <nav class="hidden md:flex gap-6 text-xs uppercase font-bold tracking-wide">
-                <a href="#home" class="text-gray-300 hover:text-cyan-400 transition">HOME</a>
-                <a href="#optimizers" class="text-gray-300 hover:text-cyan-400 transition">OPTIMIZERS</a>
-                <a href="#cheats" class="text-gray-300 hover:text-cyan-400 transition">CHEATS</a>
-                <a href="#emulators" class="text-gray-300 hover:text-cyan-400 transition">EMULATORS</a>
-                <a href="#games" class="text-gray-300 hover:text-cyan-400 transition">GAMES</a>
-                <a href="#about" class="text-gray-300 hover:text-cyan-400 transition">ABOUT</a>
+            <nav class="hidden md:flex gap-6 text-xs uppercase font-bold">
+                <a href="#home" class="text-gray-300 hover:text-cyan-400">HOME</a>
+                <a href="#optimizers" class="text-gray-300 hover:text-cyan-400">OPTIMIZERS</a>
+                <a href="#cheats" class="text-gray-300 hover:text-cyan-400">CHEATS</a>
+                <a href="#emulators" class="text-gray-300 hover:text-cyan-400">EMULATORS</a>
+                <a href="#games" class="text-gray-300 hover:text-cyan-400">GAMES</a>
+                <a href="#about" class="text-gray-300 hover:text-cyan-400">ABOUT</a>
+                <a href="#yt-resources" class="text-gray-300 hover:text-cyan-400">YT RESOURCES</a>
             </nav>
-            <!-- 3 icons: youtube, discord, email -->
             <div class="flex gap-3">
-                <a id="yt-icon" href="#" target="_blank" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600/20 hover:border-red-500 transition-all"><i class="fab fa-youtube text-red-400 text-sm"></i></a>
-                <a id="dc-icon" href="#" target="_blank" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-indigo-600/20 hover:border-indigo-500 transition-all"><i class="fab fa-discord text-indigo-400 text-sm"></i></a>
-                <a id="mail-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyan-600/20 hover:border-cyan-500 transition-all"><i class="fa-regular fa-envelope text-cyan-400 text-sm"></i></a>
+                <a id="yt-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-red-600/20"><i class="fab fa-youtube text-red-400"></i></a>
+                <a id="dc-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-indigo-600/20"><i class="fab fa-discord text-indigo-400"></i></a>
+                <a id="mail-icon" href="#" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyan-600/20"><i class="fa-regular fa-envelope text-cyan-400"></i></a>
             </div>
         </div>
     </header>
 
     <main class="relative z-10 pt-20">
-        <!-- ========== HOME SECTION ========== -->
-        <section id="home" class="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
+        <!-- HOME SECTION -->
+        <section id="home" class="min-h-screen flex items-center justify-center px-4 relative">
             <div class="absolute top-1/3 left-1/4 w-80 h-80 bg-purple-600/20 rounded-full blur-[100px]"></div>
             <div class="absolute bottom-1/3 right-1/4 w-80 h-80 bg-cyan-600/20 rounded-full blur-[100px]"></div>
             <div class="max-w-5xl text-center z-10">
-                <div class="inline-block px-4 py-1.5 rounded-full glass-panel border border-purple-500/40 mb-6 backdrop-blur-sm">
-                    <span class="text-[11px] font-bold tracking-widest text-cyan-300"><i class="fa-regular fa-gem mr-1"></i> ELITE GAMING HUB</span>
+                <div class="inline-block px-4 py-1.5 rounded-full glass-panel border border-purple-500/40 mb-6">
+                    <span class="text-[11px] font-bold text-cyan-300"><i class="fa-regular fa-gem mr-1"></i> ELITE GAMING HUB</span>
                 </div>
-                <h1 class="text-5xl md:text-8xl font-black font-display leading-tight tracking-tighter">
+                <h1 class="text-5xl md:text-8xl font-black leading-tight">
                     <span class="bg-gradient-to-r from-purple-400 via-pink-500 to-cyan-400 bg-clip-text text-transparent">LIPSTER X</span>
                 </h1>
-                <p class="text-2xl md:text-4xl font-bold mt-3 tracking-wide">DOMINATE <span class="text-cyan-400 glow-text">EVERY FRAME</span></p>
-                <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm font-light">Unlock raw performance, extreme FPS, pro emulators & premium gaming panels. Welcome to the next-gen optimization platform.</p>
-                <div class="flex flex-wrap gap-4 justify-center mt-10">
-                    <a href="#optimizers" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-sm font-bold tracking-wider btn-hover"><i class="fa-solid fa-bolt mr-2"></i> EXPLORE OPTIMIZERS</a>
-                    <a href="#cheats" class="px-8 py-3 bg-white/5 border border-white/20 rounded-full text-sm font-bold backdrop-blur-sm btn-hover"><i class="fa-solid fa-shield-halved mr-2"></i> CHEAT PANELS</a>
+                <p class="text-2xl md:text-4xl font-bold mt-3">DOMINATE <span class="text-cyan-400">EVERY FRAME</span></p>
+                <p class="text-gray-400 max-w-xl mx-auto mt-5 text-sm">Unlock raw performance, extreme FPS, pro emulators & premium gaming panels.</p>
+                <div class="flex gap-4 justify-center mt-10">
+                    <a href="#optimizers" class="px-8 py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full text-sm font-bold btn-hover"><i class="fa-solid fa-bolt mr-2"></i> EXPLORE OPTIMIZERS</a>
+                    <a href="#cheats" class="px-8 py-3 bg-white/5 border border-white/20 rounded-full text-sm font-bold btn-hover"><i class="fa-solid fa-shield-halved mr-2"></i> CHEAT PANELS</a>
                 </div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 glass-panel rounded-2xl p-5 max-w-3xl mx-auto border border-white/5">
-                    <div><div class="text-3xl font-black text-cyan-400">240+</div><div class="text-[10px] uppercase tracking-wider">FPS BOOST</div></div>
-                    <div><div class="text-3xl font-black text-purple-400">80+</div><div class="text-[10px] uppercase tracking-wider">OPTIMIZERS</div></div>
-                    <div><div class="text-3xl font-black text-pink-400">15+</div><div class="text-[10px] uppercase tracking-wider">EMULATORS</div></div>
-                    <div><div class="text-3xl font-black text-emerald-400">0%</div><div class="text-[10px] uppercase tracking-wider">LAG TOLERANCE</div></div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-20 glass-panel rounded-2xl p-5 max-w-3xl mx-auto">
+                    <div><div class="text-3xl font-black text-cyan-400">240+</div><div class="text-[10px]">FPS BOOST</div></div>
+                    <div><div class="text-3xl font-black text-purple-400">80+</div><div class="text-[10px]">OPTIMIZERS</div></div>
+                    <div><div class="text-3xl font-black text-pink-400">15+</div><div class="text-[10px]">EMULATORS</div></div>
+                    <div><div class="text-3xl font-black text-emerald-400">0%</div><div class="text-[10px]">LAG</div></div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== OPTIMIZERS SECTION (80+ LINKS, CATEGORIES: RAM, GPU, CPU, MEMORY) ========== -->
+        <!-- OPTIMIZERS SECTION -->
         <section id="optimizers" class="py-20 px-4 max-w-7xl mx-auto section-fade">
             <div class="text-center mb-12">
-                <span class="text-cyan-400 text-sm font-mono tracking-wider border-b border-cyan-500/50 inline-block pb-1">⚡ THE ARMORY</span>
-                <h2 class="text-4xl md:text-5xl font-black font-display mt-3">80+ <span class="text-purple-400">OFFICIAL OPTIMIZERS</span></h2>
-                <p class="text-gray-400 text-sm max-w-xl mx-auto mt-3">Categorized: RAM boost, GPU tuning, CPU governors, memory cleaners, and pro utility tools.</p>
+                <span class="text-cyan-400 text-sm border-b border-cyan-500/50">⚡ THE ARMORY</span>
+                <h2 class="text-4xl md:text-5xl font-bold mt-3">80+ <span class="text-purple-400">OPTIMIZERS</span></h2>
             </div>
-            <!-- filter tags -->
             <div class="flex flex-wrap justify-center gap-2 mb-10">
-                <button class="filter-btn active-filter px-5 py-2 rounded-full text-xs font-bold bg-purple-600 text-white" data-filter="all">ALL</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/20" data-filter="ram">RAM</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/20" data-filter="gpu">GPU</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/20" data-filter="cpu">CPU</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/20" data-filter="memory">MEMORY</button>
-                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5 text-gray-300 hover:bg-white/20" data-filter="tweaks">FPS TWEAKS</button>
+                <button class="filter-btn active px-5 py-2 rounded-full text-xs font-bold bg-purple-600 text-white" data-filter="all">ALL</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="ram">RAM</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="gpu">GPU</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="cpu">CPU</button>
+                <button class="filter-btn px-5 py-2 rounded-full text-xs font-bold bg-white/5" data-filter="tweaks">TWEAKS</button>
             </div>
             <div id="optimizerGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
         </section>
 
-        <!-- ========== CHEATS SECTION : FREE PANEL + PAID PANEL ========== -->
+        <!-- CHEATS SECTION -->
         <section id="cheats" class="py-20 px-4 bg-black/30 border-y border-white/5 section-fade">
             <div class="max-w-6xl mx-auto">
                 <div class="text-center mb-12">
-                    <h2 class="text-4xl font-black font-display"><span class="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">CHEATS PANEL</span></h2>
-                    <p class="text-gray-400 text-sm">Choose your advantage: FREE community tools or VIP private bypass.</p>
+                    <h2 class="text-4xl font-bold"><span class="bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">CHEATS PANEL</span></h2>
                 </div>
                 <div class="grid md:grid-cols-2 gap-8">
-                    <!-- free panel -->
-                    <div class="glass-panel rounded-2xl p-7 border border-white/10 hover:border-cyan-500/40 transition-all">
-                        <div class="flex justify-between"><span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-3 py-1 rounded-full uppercase font-bold">free access</span><i class="fa-regular fa-circle-check text-2xl text-emerald-400"></i></div>
+                    <div class="glass-panel rounded-2xl p-7 border border-white/10">
+                        <span class="bg-emerald-500/20 text-emerald-300 text-[10px] px-3 py-1 rounded-full">FREE ACCESS</span>
                         <h3 class="text-2xl font-bold mt-4">Community Free Panel</h3>
-                        <p class="text-gray-400 text-sm my-4">Basic in-game overlays, recoil helpers, crosshair, and lightweight FPS unlocker (undetected basics).</p>
-                        <ul class="space-y-2 text-sm mb-6">
-                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> ESP / Radar basic</li>
-                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> No recoil presets</li>
-                            <li><i class="fa-solid fa-check-circle text-emerald-400 mr-2"></i> Lag reducer scripts</li>
-                        </ul>
-                        <a href="#" id="freePanelLink" target="_blank" class="block text-center w-full py-3 bg-white/10 rounded-xl font-bold text-sm hover:bg-white/20 transition">DOWNLOAD FREE <i class="fa-regular fa-arrow-right"></i></a>
+                        <p class="text-gray-400 text-sm my-4">Basic overlays, recoil helpers, FPS unlocker.</p>
+                        <a href="#" id="freePanelLink" class="block text-center w-full py-3 bg-white/10 rounded-xl text-sm font-bold hover:bg-white/20">DOWNLOAD FREE</a>
                     </div>
-                    <!-- paid panel -->
-                    <div class="glass-panel rounded-2xl p-7 border border-purple-500/60 shadow-[0_0_25px_rgba(139,92,246,0.3)] relative overflow-hidden">
-                        <div class="absolute top-0 right-0 bg-purple-600 text-[10px] font-black px-4 py-1 rounded-bl-xl uppercase">VIP exclusive</div>
-                        <div class="flex justify-between"><span class="bg-amber-500/20 text-amber-300 text-[10px] px-3 py-1 rounded-full uppercase font-bold">paid lifetime</span><i class="fa-regular fa-gem text-2xl text-purple-400"></i></div>
+                    <div class="glass-panel rounded-2xl p-7 border border-purple-500/60 shadow-[0_0_25px_rgba(139,92,246,0.3)]">
+                        <span class="bg-amber-500/20 text-amber-300 text-[10px] px-3 py-1 rounded-full">VIP LIFETIME</span>
                         <h3 class="text-2xl font-bold mt-4">Lipster VIP Private</h3>
-                        <p class="text-gray-400 text-sm my-4">Zero-delay memory injection, HWID spoof, wallhack + aimbot, anti-cheat bypass + cloud updates</p>
-                        <ul class="space-y-2 text-sm mb-6">
-                            <li><i class="fa-solid fa-dragon text-purple-400 mr-2"></i> Full ESP + Silent Aim</li>
-                            <li><i class="fa-solid fa-shield-halved text-purple-400 mr-2"></i> Kernel-level bypass</li>
-                            <li><i class="fa-solid fa-headset text-purple-400 mr-2"></i> 24/7 premium support</li>
-                        </ul>
-                        <a href="#" id="paidPanelLink" target="_blank" class="block text-center w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl font-bold text-sm shadow-lg transition-all">PURCHASE VIP ACCESS</a>
+                        <p class="text-gray-400 text-sm my-4">Memory injection, HWID spoof, aimbot + bypass.</p>
+                        <a href="#" id="paidPanelLink" class="block text-center w-full py-3 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl text-sm font-bold">PURCHASE VIP</a>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ========== EMULATOR SECTION ========== -->
+        <!-- EMULATORS SECTION -->
         <section id="emulators" class="py-20 px-4 max-w-7xl mx-auto section-fade">
-            <div class="text-center mb-10">
-                <h2 class="text-4xl font-black font-display"><span class="text-cyan-400">EMULATORS HUB</span> — PC OPTIMIZED</h2>
-                <p class="text-gray-400 text-sm">Official emulators for Android, Console, and retro gaming with direct links.</p>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6" id="emulatorGrid"></div>
+            <h2 class="text-4xl font-bold text-center mb-10"><span class="text-cyan-400">EMULATORS HUB</span></h2>
+            <div id="emulatorGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </section>
 
-        <!-- ========== GAMES SECTION ========== -->
+        <!-- GAMES SECTION -->
         <section id="games" class="py-20 px-4 bg-black/40 section-fade">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-10"><h2 class="text-4xl font-black font-display"><span class="text-pink-400">GAME BOOST ZONE</span></h2><div class="h-1 w-24 bg-gradient-to-r from-pink-500 to-purple-500 mx-auto mt-2 rounded-full"></div></div>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-5" id="gameGrid"></div>
+                <h2 class="text-4xl font-bold text-center mb-10"><span class="text-pink-400">GAME BOOST ZONE</span></h2>
+                <div id="gameGrid" class="grid grid-cols-2 md:grid-cols-4 gap-5"></div>
             </div>
         </section>
 
-        <!-- ========== ABOUT SECTION + YOUTUBE VIDEOS ========== -->
-        <section id="about" class="py-20 px-4 max-w-7xl mx-auto section-fade">
-            <div class="grid md:grid-cols-2 gap-12 items-center">
-                <div>
-                    <span class="text-purple-400 text-sm font-mono">#LIPSTER_X_OFFICIAL</span>
-                    <h2 class="text-4xl font-black mt-2">PROFESSIONAL <span class="text-cyan-400">GAMING DNA</span></h2>
-                    <p class="text-gray-400 text-sm mt-4 leading-relaxed">We provide extreme performance software, FPS tweaks, overclocking tools, and game-ready emulator configs. Trusted by 50k+ gamers globally. Our mission: kill lag, unlock potential.</p>
-                    <div class="flex gap-3 mt-6">
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center"><i class="fa-brands fa-youtube text-red-500 text-xl"></i></div>
-                        <div><p class="text-xs text-gray-400">Business & Support:</p><a id="aboutEmail" href="#" class="text-cyan-400 text-sm font-mono">zainkhangfx515@gmail.com</a></div>
-                    </div>
+
+        <!-- YT RESOURCES SECTION - Videos + Resources Button -->
+        <section id="yt-resources" class="py-20 px-4 bg-gradient-to-b from-black/50 to-purple-950/20 section-fade">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-12">
+                    <span class="text-red-500 text-sm font-mono border-b border-red-500/50 inline-block pb-1">🎬 LIPSTER X STUDIO</span>
+                    <h2 class="text-4xl md:text-5xl font-black font-display mt-3">MY <span class="text-red-500">YOUTUBE VIDEOS</span></h2>
+                    <p class="text-gray-400 text-sm max-w-xl mx-auto mt-3">Gaming tutorials, optimizers, cheats & pro tips — sab kuch yahan!</p>
                 </div>
-                <div id="youtubePreview" class="grid grid-cols-1 gap-4"></div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="ytVideosGrid"></div>
             </div>
         </section>
 
-        <footer class="border-t border-white/5 py-8 text-center text-gray-500 text-[11px] tracking-wide glass-panel mt-10">
-            <p>© 2026 LIPSTER X OFFICIAL — Ultimate Gaming Performance Hub. All trademarks belong to respective owners.</p>
+
+
+        <!-- ABOUT + YOUTUBE SECTION -->
+        <section id="about" class="py-20 px-4 max-w-7xl mx-auto section-fade">
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h2 class="text-4xl font-bold">PROFESSIONAL <span class="text-cyan-400">GAMING DNA</span></h2>
+                    <p class="text-gray-400 text-sm mt-4">Trusted by 50k+ gamers. Kill lag, unlock potential.</p>
+                    <p class="mt-4 text-sm">Business: <a id="aboutEmail" href="#" class="text-cyan-400">zainkhangfx515@gmail.com</a></p>
+                </div>
+                <div id="youtubePreview" class="grid gap-4"></div>
+            </div>
+        </section>
+
+        <footer class="border-t border-white/5 py-8 text-center text-gray-500 text-[11px]">
+            <p>© 2026 LIPSTER X OFFICIAL — Ultimate Gaming Hub</p>
         </footer>
     </main>
 
     <script>
-        // ---------- CONFIGURATION (all links easy to update) ----------
+        // ========== CONFIG - APNI DETAILS YAHAN DALO ==========
         const CONFIG = {
             discord: "https://discord.gg/CG9JNY5a74",
             youtubeChannel: "https://youtube.com/channel/UCP-EMmsOYpx9ILLnznVeceA",
             businessEmail: "zainkhangfx515@gmail.com",
-            freePanelLink: "https://discord.gg/CG9JNY5a74",   // free panel download redirect
-            paidPanelLink: "https://discord.gg/CG9JNY5a74",    // vip purchase link
-            videoIDs: ["GHV0A9MwHQ8", "3tmd-ClpJxA", "cQd8mnxlULg"] // youtube embed ids
+            freePanelLink: "https://discord.gg/CG9JNY5a74",
+            paidPanelLink: "https://discord.gg/CG9JNY5a74",
+            videoIDs: ["cQd8mnxlULg"]  // apni video ID yahan dalo
         };
 
-        // set header links & global
+        // Set links
         document.getElementById("yt-icon").href = CONFIG.youtubeChannel;
         document.getElementById("dc-icon").href = CONFIG.discord;
-        document.getElementById("mail-icon").href = `mailto:${CONFIG.businessEmail}`;
+        document.getElementById("mail-icon").href = "mailto:" + CONFIG.businessEmail;
         document.getElementById("freePanelLink").href = CONFIG.freePanelLink;
         document.getElementById("paidPanelLink").href = CONFIG.paidPanelLink;
-        document.getElementById("aboutEmail").href = `mailto:${CONFIG.businessEmail}`;
+        document.getElementById("aboutEmail").href = "mailto:" + CONFIG.businessEmail;
 
-        // ----------------- OPTIMIZERS DATA (80+ official links) -----------------
-        const optimizersList = [
-            // RAM (18)
-            { name: "Razer Cortex", category: "ram", url: "https://www.razer.com/cortex", desc: "RAM + game booster" },
-            { name: "Mem Reduct", category: "ram", url: "https://www.henrypp.org/product/memreduct", desc: "Lightweight memory cleaner" },
-            { name: "CleanMem", category: "ram", url: "https://www.pcwintech.com", desc: "Memory auto-free" },
-            { name: "Wise Memory Optimizer", category: "ram", url: "https://www.wisecleaner.com", desc: "One-click RAM free" },
-            { name: "Process Lasso", category: "cpu", url: "https://bitsum.com", desc: "CPU core optimizer" },
-            { name: "Quick CPU", category: "cpu", url: "https://coderbag.com", desc: "Core parking & tuning" },
-            { name: "ISLC", category: "memory", url: "https://www.wagnardsoft.com", desc: "Standby list cleaner" },
-            { name: "MSI Afterburner", category: "gpu", url: "https://www.msi.com/Landing/afterburner", desc: "GPU overclock & monitor" },
-            { name: "EVGA Precision X1", category: "gpu", url: "https://www.evga.com/precisionx1", desc: "GPU tuner" },
-            { name: "GPU-Z", category: "gpu", url: "https://www.techpowerup.com/gpuz", desc: "GPU details" },
-            { name: "NVIDIA Inspector", category: "gpu", url: "https://github.com/Orbmu2k/nvidiaProfileInspector", desc: "Advanced driver tweaks" },
-            { name: "AMD Radeon Software", category: "gpu", url: "https://www.amd.com", desc: "Adrenalin tuning" },
-            { name: "DDU", category: "gpu", url: "https://www.wagnardsoft.com", desc: "Driver uninstaller" },
-            { name: "Intel Extreme Tuning", category: "cpu", url: "https://www.intel.com", desc: "CPU overclock" },
-            { name: "ParkControl", category: "cpu", url: "https://bitsum.com/parkcontrol", desc: "Disable core parking" },
-            { name: "CPUCores", category: "cpu", url: "https://www.cpucores.com", desc: "Game dedicated CPU" },
-            { name: "RAMMap", category: "memory", url: "https://learn.microsoft.com", desc: "Advanced RAM analysis" },
-            { name: "EmptyStandbyList", category: "memory", url: "https://wj32.org/wp", desc: "Clear standby RAM" },
-            { name: "Ashampoo RAM Booster", category: "ram", url: "https://www.ashampoo.com", desc: "Memory optimizer" },
-            { name: "Glary Utilities RAM", category: "ram", url: "https://www.glarysoft.com", desc: "RAM optimizer tool" },
-            { name: "RAMRush", category: "ram", url: "https://www.fcleaner.com", desc: "Real-time memory free" },
-            { name: "IObit Smart RAM", category: "ram", url: "https://www.iobit.com", desc: "Game RAM booster" },
-            { name: "Advanced SystemCare", category: "ram", url: "https://www.iobit.com", desc: "Full system tune" },
-            { name: "WinUtilities RAM", category: "ram", url: "https://www.ylcomputing.com", desc: "Memory defrag" },
-            { name: "CPU-Z", category: "cpu", url: "https://www.cpuid.com", desc: "CPU info & bench" },
-            { name: "ThrottleStop", category: "cpu", url: "https://www.techpowerup.com", desc: "Undervolt & turbo" },
-            { name: "Ryzen Master", category: "cpu", url: "https://www.amd.com", desc: "AMD OC utility" },
-            { name: "NVCleanstall", category: "gpu", url: "https://www.techpowerup.com", desc: "Driver debloat" },
-            { name: "ASUS GPU Tweak III", category: "gpu", url: "https://www.asus.com", desc: "Graphics card control" },
-            { name: "RivaTuner", category: "gpu", url: "https://www.guru3d.com", desc: "FPS limiter & overlay" },
-            { name: "LatencyMon", category: "tweaks", url: "https://www.resplendence.com", desc: "DPC latency checker" },
-            { name: "TimerResolution", category: "tweaks", url: "https://github.com", desc: "Set high-res timer" },
-            { name: "TCP Optimizer", category: "tweaks", url: "https://www.speedguide.net", desc: "Network & ping boost" },
-            { name: "Winaero Tweaker", category: "tweaks", url: "https://winaero.com", desc: "UI performance tweaks" },
-            { name: "O&O ShutUp10++", category: "tweaks", url: "https://www.oo-software.com", desc: "Privacy & background kill" },
-            { name: "Autoruns", category: "tweaks", url: "https://learn.microsoft.com", desc: "Startup manager" },
-            { name: "BleachBit", category: "memory", url: "https://www.bleachbit.org", desc: "Cache cleaner" },
-            { name: "CCleaner", category: "memory", url: "https://www.ccleaner.com", desc: "System junk cleaner" },
-            { name: "Wise Disk Cleaner", category: "memory", url: "https://www.wisecleaner.com", desc: "Temp files removal" },
-            { name: "PrivaZer", category: "memory", url: "https://privazer.com", desc: "Deep cleaner" },
-            { name: "TreeSize", category: "memory", url: "https://www.jam-software.com", desc: "Disk space analyzer" },
-            { name: "WinDirStat", category: "memory", url: "https://windirstat.net", desc: "Visual storage usage" },
-            { name: "Revo Uninstaller", category: "memory", url: "https://www.revouninstaller.com", desc: "Remove leftovers" },
-            { name: "FPS Monitor", category: "tweaks", url: "https://fpsmonitor.com", desc: "Game overlay" }
+        // Optimizers Data
+        const optimizers = [
+            { name: "Razer Cortex", cat: "ram", url: "https://www.razer.com/cortex", desc: "RAM + Game Booster" },
+            { name: "Mem Reduct", cat: "ram", url: "https://www.henrypp.org/product/memreduct", desc: "Memory Cleaner" },
+            { name: "MSI Afterburner", cat: "gpu", url: "https://www.msi.com/Landing/afterburner", desc: "GPU Overclock" },
+            { name: "Process Lasso", cat: "cpu", url: "https://bitsum.com", desc: "CPU Optimizer" },
+            { name: "ISLC", cat: "ram", url: "https://www.wagnardsoft.com", desc: "Standby List Cleaner" },
+            { name: "GPU-Z", cat: "gpu", url: "https://www.techpowerup.com/gpuz", desc: "GPU Info" },
+            { name: "ThrottleStop", cat: "cpu", url: "https://www.techpowerup.com", desc: "Undervolt CPU" },
+            { name: "Wise Memory Opt", cat: "ram", url: "https://www.wisecleaner.com", desc: "RAM Optimizer" },
+            { name: "CCleaner", cat: "ram", url: "https://www.ccleaner.com", desc: "System Cleaner" },
+            { name: "TCP Optimizer", cat: "tweaks", url: "https://www.speedguide.net", desc: "Network Boost" },
+            { name: "ParkControl", cat: "cpu", url: "https://bitsum.com/parkcontrol", desc: "Core Parking" },
+            { name: "DDU", cat: "gpu", url: "https://www.wagnardsoft.com", desc: "Driver Uninstaller" },
+            { name: "Razer Cortex Game Booster", cat: "ram", url: "https://www.razer.com/cortex", desc: "Game Boost" },
+            { name: "Quick CPU", cat: "cpu", url: "https://coderbag.com", desc: "CPU Tuner" },
+            { name: "NVIDIA Inspector", cat: "gpu", url: "https://github.com/Orbmu2k/nvidiaProfileInspector", desc: "GPU Tweaks" },
+            { name: "TimerResolution", cat: "tweaks", url: "https://github.com", desc: "Reduce Input Lag" }
         ];
-        // extend to reach 80+ using duplicates variation but unique entries for demonstration (48 custom + more)
-        const extra = [
-            { name: "NVIDIA Reflex Tweak", category: "tweaks", url: "https://www.nvidia.com", desc: "Low latency mode" }, { name: "Intel Graphics Command", category: "gpu", url: "https://www.intel.com", desc: "IGPU booster" },
-            { name: "Smart Game Booster", category: "ram", url: "https://www.razer.com", desc: "One-click boost" }, { name: "MZ RAM Booster", category: "ram", url: "https://www.mztweak.com", desc: "Aggressive cleaner" },
-            { name: "GameFire", category: "cpu", url: "https://www.gamefire.com", desc: "CPU affinity manager" }, { name: "Prio", category: "cpu", url: "https://www.prnwatch.com", desc: "Process priority saver" },
-            { name: "Process Hacker", category: "tweaks", url: "https://processhacker.sourceforge.io", desc: "Advanced task manager" }, { name: "System Mechanic", category: "memory", url: "https://www.iolo.com", desc: "PC tuneup" },
-            { name: "Outbyte PC Repair", category: "memory", url: "https://www.outbyte.com", desc: "Optimization suite" }
-        ];
-        const fullOptimizers = [...optimizersList, ...extra];
-        
+
         function renderOptimizers() {
-            const container = document.getElementById("optimizerGrid");
-            container.innerHTML = "";
-            fullOptimizers.forEach(opt => {
-                const card = document.createElement("div");
-                card.className = `optim-card glass-panel rounded-xl p-4 border border-white/10 card-hover transition-all hover-target ${opt.category}`;
-                card.setAttribute("data-cat", opt.category);
-                card.innerHTML = `
-                    <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-microchip text-cyan-400 text-sm"></i><span class="text-[10px] uppercase tracking-wider text-purple-300">${opt.category}</span></div>
-                    <h4 class="font-bold text-base">${opt.name}</h4>
-                    <p class="text-gray-400 text-[11px] my-2">${opt.desc.substring(0, 45)}</p>
-                    <a href="${opt.url}" target="_blank" class="inline-flex items-center text-[11px] font-bold text-cyan-400 hover:text-white transition gap-1 mt-2"><i class="fa-solid fa-link"></i> Official Link <i class="fa-regular fa-arrow-up-right-from-square"></i></a>
-                `;
-                container.appendChild(card);
-            });
+            const grid = document.getElementById("optimizerGrid");
+            grid.innerHTML = optimizers.map(opt => `
+                <div class="glass-panel rounded-xl p-4 border border-white/10 card-hover" data-cat="${opt.cat}">
+                    <div class="flex items-center gap-2 mb-2"><i class="fa-solid fa-microchip text-cyan-400"></i><span class="text-[10px] text-purple-300 uppercase">${opt.cat}</span></div>
+                    <h4 class="font-bold">${opt.name}</h4>
+                    <p class="text-gray-400 text-[11px] my-2">${opt.desc}</p>
+                    <a href="${opt.url}" target="_blank" class="text-[11px] text-cyan-400 hover:text-white">Official Link →</a>
+                </div>
+            `).join('');
         }
 
-        // filter category
-        window.filterOpt = function(cat) {
-            document.querySelectorAll(".optim-card").forEach(card => { card.style.display = (cat === "all" || card.getAttribute("data-cat") === cat) ? "block" : "none"; });
-            document.querySelectorAll(".filter-btn").forEach(btn => { btn.classList.remove("active-filter", "bg-purple-600", "text-white"); btn.classList.add("bg-white/5", "text-gray-300"); });
-            if(event && event.target) { event.target.classList.add("active-filter", "bg-purple-600", "text-white"); event.target.classList.remove("bg-white/5", "text-gray-300"); }
-        };
-        document.querySelectorAll(".filter-btn").forEach(btn => { btn.addEventListener("click", (e) => { filterOpt(btn.getAttribute("data-filter")); }); });
-        
-        // EMULATORS (official links)
-        const emulatorsList = [
-            { name: "BlueStacks 5", url: "https://www.bluestacks.com", desc: "Android gaming emulator (optimized)" },
-            { name: "LDPlayer 9", url: "https://www.ldplayer.net", desc: "Lightweight Android emulator" },
-            { name: "MEmu Play", url: "https://www.memuplay.com", desc: "Performance Android gaming" },
-            { name: "Nox Player", url: "https://www.bignox.com", desc: "Android emulator with keymapping" },
-            { name: "Gameloop (Tencent)", url: "https://gameloop.com", desc: "Official for PUBG/CODM" },
-            { name: "SmartGaga", url: "https://www.smartgaga.com", desc: "Low-end PC emulator" },
-            { name: "MuMu Player", url: "https://mumu.163.com", desc: "High FPS emulator" },
-            { name: "RetroArch", url: "https://www.retroarch.com", desc: "All-in-one retro console" },
-            { name: "PCSX2", url: "https://pcsx2.net", desc: "PS2 emulator" },
-            { name: "RPCS3", url: "https://rpcs3.net", desc: "PS3 emulator" },
-            { name: "Cemu", url: "https://cemu.info", desc: "Wii U emulator" },
-            { name: "Yuzu", url: "https://yuzu-emu.org", desc: "Switch emulator" },
-            { name: "Dolphin Emulator", url: "https://dolphin-emu.org", desc: "GameCube/Wii" }
+        // Filter function
+        function filterOptimizers(category) {
+            document.querySelectorAll('#optimizerGrid > div').forEach(card => {
+                card.style.display = (category === 'all' || card.getAttribute('data-cat') === category) ? 'block' : 'none';
+            });
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('bg-purple-600', 'text-white'));
+            if(event && event.target) event.target.classList.add('bg-purple-600', 'text-white');
+        }
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => filterOptimizers(btn.getAttribute('data-filter')));
+        });
+
+        // Emulators
+        const emulators = [
+            { name: "BlueStacks 5", url: "https://www.bluestacks.com", desc: "Android Emulator" },
+            { name: "LDPlayer 9", url: "https://www.ldplayer.net", desc: "Lightweight Android" },
+            { name: "MEmu Play", url: "https://www.memuplay.com", desc: "Performance Gaming" },
+            { name: "Nox Player", url: "https://www.bignox.com", desc: "Android Emulator" },
+            { name: "Gameloop", url: "https://gameloop.com", desc: "Tencent Gaming" }
         ];
-        function renderEmulators() {
-            const grid = document.getElementById("emulatorGrid");
-            grid.innerHTML = emulatorsList.map(e => `<a href="${e.url}" target="_blank" class="glass-panel p-4 rounded-xl border border-white/10 hover:border-cyan-500 transition flex items-center gap-3"><i class="fa-solid fa-gamepad text-2xl text-cyan-400"></i><div><h3 class="font-bold">${e.name}</h3><p class="text-[10px] text-gray-400">${e.desc}</p></div></a>`).join('');
-        }
-        
-        // GAMES (quick links)
-        const gameLinks = [
-            { name: "Free Fire MAX", url: "https://ff.garena.com", icon: "fa-fire" }, { name: "Valorant", url: "https://playvalorant.com", icon: "fa-bullseye" },
-            { name: "CS2", url: "https://counter-strike.net", icon: "fa-crosshairs" }, { name: "Fortnite", url: "https://fortnite.com", icon: "fa-gamepad" },
-            { name: "Apex Legends", url: "https://ea.com/apex", icon: "fa-jet-fighter" }, { name: "Genshin Impact", url: "https://genshin.hoyoverse.com", icon: "fa-meteor" },
-            { name: "Call of Duty", url: "https://callofduty.com", icon: "fa-gun" }, { name: "PUBG", url: "https://pubg.com", icon: "fa-plane" }
+        document.getElementById("emulatorGrid").innerHTML = emulators.map(e => `<a href="${e.url}" target="_blank" class="glass-panel p-4 rounded-xl border border-white/10 hover:border-cyan-500 flex items-center gap-3"><i class="fa-solid fa-gamepad text-2xl text-cyan-400"></i><div><h3 class="font-bold">${e.name}</h3><p class="text-[10px] text-gray-400">${e.desc}</p></div></a>`).join('');
+
+        // Games
+        const games = [
+            { name: "Free Fire", url: "https://ff.garena.com", icon: "fa-fire" },
+            { name: "Valorant", url: "https://playvalorant.com", icon: "fa-bullseye" },
+            { name: "CS2", url: "https://counter-strike.net", icon: "fa-crosshairs" },
+            { name: "Fortnite", url: "https://fortnite.com", icon: "fa-gamepad" }
         ];
-        function renderGames() {
-            document.getElementById("gameGrid").innerHTML = gameLinks.map(g => `<a href="${g.url}" target="_blank" class="glass-panel p-4 rounded-xl flex items-center gap-3 border border-white/10 hover:bg-white/5"><i class="fa-solid ${g.icon} text-pink-400 text-xl"></i><span class="font-bold text-sm">${g.name}</span></a>`).join('');
-        }
-        
-        // YOUTUBE PREVIEW (about section)
-        function renderYouTubeVideos() {
-            const container = document.getElementById("youtubePreview");
-            container.innerHTML = CONFIG.videoIDs.map(id => `<div class="rounded-xl overflow-hidden border border-white/10"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`).join('');
-        }
-        
-        // particles background
+        document.getElementById("gameGrid").innerHTML = games.map(g => `<a href="${g.url}" target="_blank" class="glass-panel p-4 rounded-xl flex items-center gap-3 border border-white/10"><i class="fa-solid ${g.icon} text-pink-400 text-xl"></i><span class="font-bold text-sm">${g.name}</span></a>`).join('');
+
+        // YouTube Videos
+        document.getElementById("youtubePreview").innerHTML = CONFIG.videoIDs.map(id => `<div class="rounded-xl overflow-hidden border border-white/10"><iframe class="w-full aspect-video" src="https://www.youtube.com/embed/${id}" frameborder="0" allowfullscreen></iframe></div>`).join('');
+
+        // Particles Background
         function initParticles() {
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -340,11 +261,11 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.getElementById("particle-canvas").appendChild(renderer.domElement);
             const geometry = new THREE.BufferGeometry();
-            const count = 800;
+            const count = 500;
             const positions = new Float32Array(count * 3);
             for(let i=0;i<count*3;i+=3){ positions[i]=(Math.random()-0.5)*20; positions[i+1]=(Math.random()-0.5)*12; positions[i+2]=(Math.random()-0.5)*15; }
             geometry.setAttribute('position', new THREE.BufferAttribute(positions,3));
-            const material = new THREE.PointsMaterial({ color: 0x8b5cf6, size: 0.03, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
+            const material = new THREE.PointsMaterial({ color: 0x8b5cf6, size: 0.04, transparent: true, opacity: 0.4, blending: THREE.AdditiveBlending });
             const points = new THREE.Points(geometry, material);
             scene.add(points);
             camera.position.z = 6;
@@ -352,27 +273,62 @@
             animate();
             window.addEventListener('resize', () => { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); });
         }
-        
-        // scroll animations + cursor
-        const cursorDiv = document.getElementById("cursor"), dotDiv = document.getElementById("cursorDot");
-        document.addEventListener("mousemove", (e) => { if(cursorDiv){ cursorDiv.style.left = e.clientX+"px"; cursorDiv.style.top = e.clientY+"px"; dotDiv.style.left = e.clientX+"px"; dotDiv.style.top = e.clientY+"px"; } });
-        const sections = document.querySelectorAll(".section-fade");
-        const observer = new IntersectionObserver(entries => entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add("visible"); }), { threshold: 0.1 });
-        sections.forEach(s => observer.observe(s));
-        
-        // init all
-        renderOptimizers();
-        renderEmulators();
-        renderGames();
-        renderYouTubeVideos();
         initParticles();
-        filterOpt("all"); // default all active
+
+        // Custom Cursor
+        const cursor = document.getElementById("cursor"), dot = document.getElementById("cursorDot");
+        document.addEventListener("mousemove", (e) => { cursor.style.left = e.clientX + "px"; cursor.style.top = e.clientY + "px"; dot.style.left = e.clientX + "px"; dot.style.top = e.clientY + "px"; });
+
+        // Scroll Animations
+        const sections = document.querySelectorAll(".section-fade");
+        const observer = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add("visible")), { threshold: 0.1 });
+        sections.forEach(s => observer.observe(s));
+
+          // YT Videos Data (Apni videos yahan add karo)
+        const ytVideos = [
+            {
+                videoId: "cQd8mnxlULg",
+                title: "OMG! Hidden Sniper Macro Finally Revealed 😱",
+                thumbnail: "https://img.youtube.com/vi/cQd8mnxlULg/maxresdefault.jpg",
+                resourceLink: "https://discord.gg/CG9JNY5a74",
+                resourceName: "Download Macro"
+            },
+            {
+                videoId: "GHV0A9MwHQ8",
+                title: "MSI App Player vs BlueStacks 5 | Free Fire FPS Test",
+                thumbnail: "https://img.youtube.com/vi/GHV0A9MwHQ8/maxresdefault.jpg",
+                resourceLink: "https://discord.gg/CG9JNY5a74",
+                resourceName: "Get Settings"
+            }
+        ];
+
+        function renderYTVideos() {
+            const container = document.getElementById("ytVideosGrid");
+            if(container) {
+                container.innerHTML = ytVideos.map(video => `
+                    <div class="glass-panel rounded-xl overflow-hidden border border-white/10 hover:border-red-500/40 transition-all duration-300 group">
+                        <div class="relative">
+                            <img src="${video.thumbnail}" class="w-full aspect-video object-cover" alt="${video.title}">
+                            <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                <a href="https://youtu.be/${video.videoId}" target="_blank" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center">
+                                    <i class="fab fa-youtube text-white text-xl"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <h3 class="font-bold text-md line-clamp-2 mb-3 group-hover:text-red-400 transition">${video.title}</h3>
+                            <a href="${video.resourceLink}" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-pink-600 rounded-lg text-xs font-bold hover:shadow-lg transition w-full justify-center">
+                                <i class="fa-solid fa-download"></i> ${video.resourceName}
+                            </a>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+
+        renderOptimizers();
+        renderYTVideos();
     </script>
-    <style>
-        .active-filter { background: #8b5cf6 !important; color: white !important; }
-        .optim-card[style*="display: none"] { display: none; }
-        .visible { opacity: 1 !important; transform: translateY(0) !important; }
-        .section-fade { opacity: 0; transform: translateY(28px); transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
-    </style>
 </body>
 </html>
